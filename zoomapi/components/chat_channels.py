@@ -6,7 +6,7 @@ from zoomapi.components import base
 class ChatChannelsComponentV2(base.BaseComponent):
     """Component dealing with all chat channels related matters"""
 
-    def list_channels(self, **kwargs):
+    def list(self, **kwargs):
         return self.get_request(
             "/chat/users/me/channels"
         )
