@@ -55,3 +55,6 @@ ENV/
 .project
 .pydevproject
 .settings/
+
+# Client Id and Secret
+bot.ini
