@@ -57,4 +57,4 @@ ENV/
 .settings/
 
 # Client Id and Secret
-bot.ini
+bots/bot.ini
