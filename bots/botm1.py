@@ -41,3 +41,11 @@ while not stop:
     print(client.chat_messages.post(to_channel=cid, message=message))
     if message == "stop":
         stop = True
+    elif message == "create":
+        c_name = input("Enter channel name: ")
+        print(client.chat_channels.create(to_channel=cid, name = c_name))
+    elif message == "get":
+        # channelId = input("Enter channel name:")
+        print(client.chat_channels.get(to_channel=cid, channelId = cid))
+    
+
