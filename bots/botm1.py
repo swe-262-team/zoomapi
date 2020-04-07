@@ -69,18 +69,19 @@ def delete_message(client, messageId, cid):
 ACTIONS = [
     "0. Exit program",
     "1. See existing channels",
-    "2. Create a new channel",
-    "3. List last 10 messages in channel",
-    "4. Send message to channel",
-    "5. Edit last message in channel",
-    "6. Delete last message in channel",
-    "7. Edit channel name",
-    "8. Delete channel",
-    "9. List members of channel",
-    "10. Join channel",
-    "11. Leave channel",
-    "12. Remove member from channel",
-    "13. Invite member(s) to channel"
+    "2. See channel detail",
+    "3. Create a new channel",
+    "4. List last 10 messages in channel",
+    "5. Send message to channel",
+    "6. Edit message in channel",
+    "7. Delete message in channel",
+    "8. Edit channel name",
+    "9. Delete channel",
+    "10. List members of channel",
+    "11. Join channel",
+    "12. Leave channel",
+    "13. Remove member from channel",
+    "14. Invite member(s) to channel"
 ]
 
 ERROR_MSG = "Something went wrong while trying to perform this action"
@@ -107,39 +108,40 @@ while usr_input != "0":
         elif action == 1:
             list_channels(client)
         elif action == 2:
-            # create channel
+            # get channel
             pass
         elif action == 3:
+            # create channel
+            pass
+        elif action == 4:
             cid = input("Enter channel id: ")
             list_messages(cid)
-        elif action == 4:
+        elif action == 5:
             cid = input("Enter channel id: ")
             msg = input("Enter message: ")
             send_message(client, msg, cid)
-        elif action == 5:
+        elif action == 6:
             cid = input("Enter channel id: ")
             msg_id = input("Enter message id: ")
             msg = input("Enter message: ")
             edit_message(client, msg_id, cid, msg)
             pass
-        elif action == 6:
+        elif action == 7:
             cid = input("Enter channel id: ")
             msg_id = input("Enter message id: ")
             delete_message(client, msg_id, cid)
             pass
-        elif action == 7:
+        elif action == 8:
             # update channel name
             pass
-        elif action == 8:
+        elif action == 9:
             # delete channel
             pass
-        elif action == 9:
+        elif action == 10:
             # list members of channel
             pass
-        elif action == 10:
-            # join channel
-            pass
         elif action == 11:
+            # join channel
             pass
         elif action == 12:
             pass
