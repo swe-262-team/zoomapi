@@ -13,9 +13,9 @@ class ChatChannelsComponentV2(base.BaseComponent):
         )
 
     def create(self, **kwargs):
-        util.require_keys(kwargs, "name")
+        util.require_keys(kwargs, ["name", "type","members"])
         return self.post_request(
-            "/chat/users/me/channels"
+            "/chat/users/me/channels", data = kwargs
         )
 
     def get(self, **kwargs):
@@ -27,7 +27,7 @@ class ChatChannelsComponentV2(base.BaseComponent):
     def update(self, **kwargs):
         util.require_keys(kwargs, "channelId")
         return self.patch_request(
-            "/chat/channels/{}".format(kwargs.get("channelId")), params=kwargs
+            "/chat/channels/{}".format(kwargs.get("channelId")), data=kwargs
         )
 
     def delete(self, **kwargs):
