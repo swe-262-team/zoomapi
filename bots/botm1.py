@@ -63,27 +63,25 @@ def list_messages(cid):
         print(ERROR_MSG)
 
 
-def send_message(client, message, cid):
+def send_message(message, cid):
     print(client.chat_messages.post(to_channel=cid, message=message))
 
-
-def edit_message(client, messageId, cid, message):
+def edit_message(messageId, cid, message):
     print(client.chat_messages.update(to_channel=cid, messageId=messageId, message=message))
 
-
-def delete_message(client, messageId, cid):
+def delete_message(messageId, cid):
     print(client.chat_messages.delete(to_channel=cid, messageId=messageId).content)
 
-def create_channel(client, name, typeOf, members):
+def create_channel(name, typeOf, members):
     print(client.chat_channels.create(name=name, type=typeOf, members=members))
 
 def update_channel(cid, name):
     print(client.chat_channels.update(channelId=cid, name=name).content)
 
-def leave_channel(client, cid):
+def leave_channel(cid):
     print(client.chat_channels.leave(channelId=cid).content)
 
-def join_channel(client, cid):
+def join_channel(cid):
     print(client.chat_channels.join(channelId=cid).content)
 
 def delete_channel(cid):
@@ -155,24 +153,24 @@ while usr_input != "0":
             name = input("Enter name of channel: ")
             typeOf = input("Enter type of channel (1 private, 2 private, 3 public): ")
             members = []
-            create_channel(client, name,typeOf,members)
+            create_channel(name,typeOf,members)
         elif action == 4:
             cid = input("Enter channel id: ")
             list_messages(cid)
         elif action == 5:
             cid = input("Enter channel id: ")
             msg = input("Enter message: ")
-            send_message(client, msg, cid)
+            send_message(msg, cid)
         elif action == 6:
             cid = input("Enter channel id: ")
             msg_id = input("Enter message id: ")
             msg = input("Enter message: ")
-            edit_message(client, msg_id, cid, msg)
+            edit_message(msg_id, cid, msg)
             pass
         elif action == 7:
             cid = input("Enter channel id: ")
             msg_id = input("Enter message id: ")
-            delete_message(client, msg_id, cid)
+            delete_message(msg_id, cid)
             pass
         elif action == 8:
             cid = input("Enter channel id: ")
@@ -189,11 +187,11 @@ while usr_input != "0":
             pass
         elif action == 11:
             cid = input("Enter channel id: ")
-            join_channel(client,cid)
+            join_channel(cid)
             pass
         elif action == 12:
             cid = input("Enter channel id: ")
-            leave_channel(client, cid)
+            leave_channel(cid)
             pass
         elif action == 13:
             cid = input("Enter channel id: ")
@@ -202,7 +200,7 @@ while usr_input != "0":
             
             pass
         elif action == 14:
-            cid = input("Enter channel id")
+            cid = input("Enter channel id: ")
             email = input("Enter email to invite: ")
             members = [{"email":email}]
             invite_member(cid, members)
