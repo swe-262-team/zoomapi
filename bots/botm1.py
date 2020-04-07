@@ -42,6 +42,14 @@ def list_channels(client):
         print(ERROR_MSG)
 
 
+def get_channel(cid):
+    getchannel = json.loads(client.chat_channels.get(channelId=cid).content)
+    try:
+        print(getchannel)
+    except KeyError:
+        print(ERROR_MSG)
+
+
 def list_messages(cid):
     try:
         messageList = json.loads(client.chat_messages.list(to_channel=cid, user_id="me").content)["messages"]
@@ -66,6 +74,28 @@ def edit_message(client, messageId, cid, message):
 def delete_message(client, messageId, cid):
     print(client.chat_messages.delete(to_channel=cid, messageId=messageId).content)
 
+
+# todo: 400 error
+def update_channel(cid, name):
+    print(client.chat_channels.update(channelId=cid, name=name))
+
+
+# todo: 400 error
+def delete_channel(cid):
+    print(client.chat_channels.delete(channelId=cid))
+
+
+def list_members(cid):
+    list_mem = json.loads(client.chat_channels.list_members(channelId=cid).content)
+    try:
+        for member in list_mem["members"]:
+            print(member["name"])
+            print("ID: " + member["id"])
+            print("")
+    except KeyError:
+        print(ERROR_MSG)
+
+
 ACTIONS = [
     "0. Exit program",
     "1. See existing channels",
@@ -84,7 +114,8 @@ ACTIONS = [
     "14. Invite member(s) to channel"
 ]
 
-ERROR_MSG = "Something went wrong while trying to perform this action"
+ERROR_MSG = "Something went wrong while trying to perform this action. Please make sure the input was valid and your " \
+            "network connection is stable. "
 
 
 def display_prompt():
@@ -108,7 +139,8 @@ while usr_input != "0":
         elif action == 1:
             list_channels(client)
         elif action == 2:
-            # get channel
+            cid = input("Enter channel id: ")
+            get_channel(cid)
             pass
         elif action == 3:
             # create channel
@@ -132,47 +164,36 @@ while usr_input != "0":
             delete_message(client, msg_id, cid)
             pass
         elif action == 8:
-            # update channel name
+            cid = input("Enter channel id: ")
+            name = input("Enter new channel name: ")
+            update_channel(cid, name)
             pass
         elif action == 9:
-            # delete channel
+            cid = input("Enter channel id: ")
+            delete_channel(cid)
             pass
         elif action == 10:
-            # list members of channel
+            cid = input("Enter channel id: ")
+            list_members(cid)
             pass
         elif action == 11:
             # join channel
             pass
         elif action == 12:
+            # leave channel
             pass
         elif action == 13:
+            # remove member from channel
             pass
         elif action == 14:
+            # invite member(s) to channel
             pass
         else:
-            print("Please enter a number between 1 to " + str(len(ACTIONS)-1))
+            print("Please enter a number between 1 to " + str(len(ACTIONS) - 1))
     except ValueError:
         print("Action not recognized. Please enter a number from 1 to " + str(len(ACTIONS) - 1))
     print("\n---------------------\n")
 
-
-#
-# print("-------Channel List-------")
-# channelList = json.loads(client.chat_channels.list(to_channel=cid).content)["channels"]
-# time.sleep(2)
-# print(channelList)
-#
-# print("-------Get Channel--------")
-# getchannel = json.loads(client.chat_channels.get(channelId=cid).content)
-# time.sleep(2)
-# print(getchannel)
-# time.sleep(2)
-# print("-------Get Members--------")
-# list_mem = json.loads(client.chat_channels.list_members(channelId=cid).content)["members"]
-# time.sleep(2)
-# print(list_mem)
-#
-# time.sleep(2)
 # print("----Leave Channel----")
 # print(client.chat_channels.leave(channelId=cid).content)
 #
