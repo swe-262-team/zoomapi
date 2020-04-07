@@ -74,16 +74,26 @@ def edit_message(client, messageId, cid, message):
 def delete_message(client, messageId, cid):
     print(client.chat_messages.delete(to_channel=cid, messageId=messageId).content)
 
+def create_channel(client, name, typeOf, members):
+    print(client.chat_channels.create(name=name, type=typeOf, members=members))
 
-# todo: 400 error
 def update_channel(cid, name):
-    print(client.chat_channels.update(channelId=cid, name=name))
+    print(client.chat_channels.update(channelId=cid, name=name).content)
 
+def leave_channel(client, cid):
+    print(client.chat_channels.leave(channelId=cid).content)
 
-# todo: 400 error
+def join_channel(client, cid):
+    print(client.chat_channels.join(channelId=cid).content)
+
 def delete_channel(cid):
-    print(client.chat_channels.delete(channelId=cid))
+    print(client.chat_channels.delete(channelId=cid).content)
 
+def remove_member(cid, memberId):
+    print(client.chat_channels.remove(channelId= cid, memberId = memberId).content)
+
+def invite_member(cid, email):
+    print(client.chat_channels.invite(channelId = cid, members = email).content)
 
 def list_members(cid):
     list_mem = json.loads(client.chat_channels.list_members(channelId=cid).content)
@@ -141,10 +151,11 @@ while usr_input != "0":
         elif action == 2:
             cid = input("Enter channel id: ")
             get_channel(cid)
-            pass
         elif action == 3:
-            # create channel
-            pass
+            name = input("Enter name of channel: ")
+            typeOf = input("Enter type of channel (1 private, 2 private, 3 public): ")
+            members = []
+            create_channel(client, name,typeOf,members)
         elif action == 4:
             cid = input("Enter channel id: ")
             list_messages(cid)
@@ -177,16 +188,24 @@ while usr_input != "0":
             list_members(cid)
             pass
         elif action == 11:
-            # join channel
+            cid = input("Enter channel id: ")
+            join_channel(client,cid)
             pass
         elif action == 12:
-            # leave channel
+            cid = input("Enter channel id: ")
+            leave_channel(client, cid)
             pass
         elif action == 13:
-            # remove member from channel
+            cid = input("Enter channel id: ")
+            memberId = input("Enter member id: ")
+            remove_member(cid, memberId)
+            
             pass
         elif action == 14:
-            # invite member(s) to channel
+            cid = input("Enter channel id")
+            email = input("Enter email to invite: ")
+            members = [{"email":email}]
+            invite_member(cid, members)
             pass
         else:
             print("Please enter a number between 1 to " + str(len(ACTIONS) - 1))
