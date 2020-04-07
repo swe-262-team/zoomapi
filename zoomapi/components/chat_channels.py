@@ -43,9 +43,9 @@ class ChatChannelsComponentV2(base.BaseComponent):
         )
 
     def invite(self, **kwargs):
-        util.require_keys(kwargs, "channelId")
+        util.require_keys(kwargs, ["channelId","members"])
         return self.post_request(
-            "/chat/channels/{}/members".format(kwargs.get("channelId")), params=kwargs
+            "/chat/channels/{}/members".format(kwargs.get("channelId")), data=kwargs
         )
 
     def join(self, **kwargs):

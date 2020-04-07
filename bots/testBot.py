@@ -37,11 +37,10 @@ channels = response["channels"]
 print(channels)
 
 for c in channels:
-    print(c)
-    if "Hello World" in c.values():
+    if "my_test" in c.values():
         #print("Found channel my_test", c["id"])
         cid = to_channel = c["id"]
-
+cid = to_channel
 # Send message
 # stop = False
 # while not stop:
@@ -61,31 +60,51 @@ for c in channels:
 # time.sleep(2)
 # print(getchannel)
 # time.sleep(2)
+time.sleep(2)
+print("-------Get Members--------")
+member = json.loads(client.chat_channels.list_members(channelId = cid).content)["members"][0]
+time.sleep(2)
+print(member)
+print(member["email"])
+
+for c in channels:
+    if "Edited Channel Name" in c.values():
+        #print("Found channel my_test", c["id"])
+        cid = to_channel = c["id"]
+time.sleep(2)
+
+invites = [{"email": member["email"]}]
+print("--------Invite Member----------")
+print(client.chat_channels.invite(channelId = cid, members = invites).content)
+
+time.sleep(2)
+print("------Remove a Member-------")
+print(client.chat_channels.remove(channelId = cid, memberId = member["id"]).content)
+
+# time.sleep(2)
+# print("---------Create Channel---------")
+# email = json.loads(client.user.get(id = "me").content)["email"]
+# name = "Hello World"
+# typeOf = 1
+# members = [{"email": email}]
+#
+# time.sleep(2)
+# obj= json.loads(client.chat_channels.create(name= name, type=typeOf, members=members).content)
+# cid = obj["id"]
+# print(obj)
+#
 # print("-------Get Members--------")
 # list_mem = json.loads(client.chat_channels.list_members(channelId = cid).content)["members"]
 # time.sleep(2)
 # print(list_mem)
 
+# print("--------------Update Channel----------")
+# print(client.chat_channels.update(channelId=cid, name="Edited Channel Name").content)
+# time.sleep(2)
 
-time.sleep(2)
-print("---------Create Channel---------")
-email = json.loads(client.user.get(id = "me").content)["email"]
-name = "Hello World"
-typeOf = 3
-members = [{"email": email}]
-
-time.sleep(2)
-obj= json.loads(client.chat_channels.create(name= name, type=typeOf, members=members).content)
-cid = obj["id"]
-print(obj)
-
-print("--------------Update Channel----------")
-print(client.chat_channels.update(channelId=cid, name="Edited Channel Name").content)
-time.sleep(2)
-
-print("--------Delete Channel-------")
-print(client.chat_channels.delete(channelId=cid).content)
-time.sleep(2)
+# print("--------Delete Channel-------")
+# print(client.chat_channels.delete(channelId=cid).content)
+# time.sleep(2)
 
 # print(client.chat_messages.update(to_channel=cid, messageId=messageList[0]["id"], message="I've been edited"))
 
