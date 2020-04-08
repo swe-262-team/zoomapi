@@ -32,14 +32,61 @@ def setup():
     return client
 
 
-def list_channels(client):
+def select_channel():
+    channels = list_channels()
+    if len(channels) > 0:
+        target_channel = input("Enter number of target channel: ")
+        try:
+            target_channel = int(target_channel) - 1
+            if 0 <= target_channel < len(channels):
+                return channels[target_channel]["id"]
+            else:
+                print("Input not recognized")
+        except TypeError:
+            print("Input not recognized")
+    return ""
+
+
+def select_member(cid):
+    members = list_members(cid)
+    if len(members) > 0:
+        target = input("Enter number of target member: ")
+        try:
+            target = int(target) - 1
+            if 0 <= target < len(members):
+                return members[target]["id"]
+            else:
+                print("Input not recognized")
+        except TypeError:
+            print("Input not recognized")
+    return ""
+
+
+def select_message(cid):
+    msgs = list_messages(cid)
+    if len(msgs) > 0:
+        target = input("Enter number of target message: ")
+        try:
+            target = int(target) - 1
+            if 0 <= target < len(msgs):
+                return msgs[target]["id"]
+            else:
+                print("Input not recognized")
+        except TypeError:
+            print("Input not recognized")
+    return ""
+
+
+def list_channels():
     response = json.loads(client.chat_channels.list().content)
     try:
         channels = response["channels"]
-        for channel in channels:
-            print(channel["name"] + ": " + channel["id"])
+        for i in range(len(channels)):
+            print(str(i + 1) + ". " + channels[i]["name"])
+        return response["channels"]
     except KeyError:
         print(ERROR_MSG)
+        return []
 
 
 def get_channel(cid):
@@ -54,54 +101,71 @@ def list_messages(cid):
     try:
         messageList = json.loads(client.chat_messages.list(to_channel=cid, user_id="me").content)["messages"]
         print("")
-        for message in messageList:
-            print("From: " + message["sender"])
-            print("Message ID: " + message["id"])
-            print(message["message"])
+        for i in range(len(messageList)):
+            print("#" + str(i + 1))
+            print("From: " + messageList[i]["sender"])
+            print("Message ID: " + messageList[i]["id"])
+            print(messageList[i]["message"])
             print("")
+        return messageList
     except KeyError:
         print(ERROR_MSG)
+        return []
 
 
 def send_message(message, cid):
     print(client.chat_messages.post(to_channel=cid, message=message))
 
+
 def edit_message(messageId, cid, message):
     print(client.chat_messages.update(to_channel=cid, messageId=messageId, message=message))
+
 
 def delete_message(messageId, cid):
     print(client.chat_messages.delete(to_channel=cid, messageId=messageId).content)
 
+
 def create_channel(name, typeOf, members):
     print(client.chat_channels.create(name=name, type=typeOf, members=members))
+
 
 def update_channel(cid, name):
     print(client.chat_channels.update(channelId=cid, name=name).content)
 
+
 def leave_channel(cid):
     print(client.chat_channels.leave(channelId=cid).content)
+
 
 def join_channel(cid):
     print(client.chat_channels.join(channelId=cid).content)
 
+
 def delete_channel(cid):
     print(client.chat_channels.delete(channelId=cid).content)
 
+
 def remove_member(cid, memberId):
-    print(client.chat_channels.remove(channelId= cid, memberId = memberId).content)
+    print(client.chat_channels.remove(channelId=cid, memberId=memberId).content)
+
 
 def invite_member(cid, email):
-    print(client.chat_channels.invite(channelId = cid, members = email).content)
+    print(client.chat_channels.invite(channelId=cid, members=email).content)
+
 
 def list_members(cid):
     list_mem = json.loads(client.chat_channels.list_members(channelId=cid).content)
     try:
-        for member in list_mem["members"]:
+        for i in range(len(list_mem["members"])):
+            member = list_mem["members"][i]
+            print("#" + str(i + 1))
             print(member["name"])
             print("ID: " + member["id"])
             print("")
+        return list_mem["members"]
     except KeyError:
         print(ERROR_MSG)
+        return []
 
 
 ACTIONS = [
@@ -145,66 +209,67 @@ while usr_input != "0":
         if action == 0:
             pass
         elif action == 1:
-            list_channels(client)
+            list_channels()
         elif action == 2:
-            cid = input("Enter channel id: ")
-            get_channel(cid)
+            cid = select_channel()
+            if len(cid) > 0:
+                get_channel(cid)
         elif action == 3:
             name = input("Enter name of channel: ")
-            typeOf = input("Enter type of channel (1 private, 2 private, 3 public): ")
+            typeOf = input("Enter type of channel (1 = private, 2 = private, 3 = public): ")
             members = []
-            create_channel(name,typeOf,members)
+            create_channel(name, typeOf, members)
         elif action == 4:
-            cid = input("Enter channel id: ")
-            list_messages(cid)
+            cid = select_channel()
+            if len(cid) > 0:
+                list_messages(cid)
         elif action == 5:
-            cid = input("Enter channel id: ")
-            msg = input("Enter message: ")
-            send_message(msg, cid)
+            cid = select_channel()
+            if len(cid) > 0:
+                msg = input("Enter message: ")
+                send_message(msg, cid)
         elif action == 6:
-            cid = input("Enter channel id: ")
-            msg_id = input("Enter message id: ")
-            msg = input("Enter message: ")
-            edit_message(msg_id, cid, msg)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                msg_id = select_message(cid)
+                msg = input("Enter message: ")
+                edit_message(msg_id, cid, msg)
         elif action == 7:
-            cid = input("Enter channel id: ")
-            msg_id = input("Enter message id: ")
-            delete_message(msg_id, cid)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                msg_id = select_message(cid)
+                delete_message(msg_id, cid)
         elif action == 8:
-            cid = input("Enter channel id: ")
-            name = input("Enter new channel name: ")
-            update_channel(cid, name)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                name = input("Enter new channel name: ")
+                update_channel(cid, name)
         elif action == 9:
-            cid = input("Enter channel id: ")
-            delete_channel(cid)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                delete_channel(cid)
         elif action == 10:
-            cid = input("Enter channel id: ")
-            list_members(cid)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                list_members(cid)
         elif action == 11:
-            cid = input("Enter channel id: ")
+            cid = input("Enter channel id (note that this must be a public channel): ")
             join_channel(cid)
-            pass
         elif action == 12:
-            cid = input("Enter channel id: ")
-            leave_channel(cid)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                leave_channel(cid)
         elif action == 13:
-            cid = input("Enter channel id: ")
-            memberId = input("Enter member id: ")
-            remove_member(cid, memberId)
-            
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                memberId = select_member(cid)
+                remove_member(cid, memberId)
         elif action == 14:
-            cid = input("Enter channel id: ")
-            email = input("Enter email to invite: ")
-            members = [{"email":email}]
-            invite_member(cid, members)
-            pass
+            cid = select_channel()
+            if len(cid) > 0:
+                email = input("Enter email to invite: ")
+                members = [{"email": email}]
+                invite_member(cid, members)
         else:
             print("Please enter a number between 1 to " + str(len(ACTIONS) - 1))
     except ValueError:
