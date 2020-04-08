@@ -114,11 +114,11 @@ def list_messages(cid):
 
 
 def send_message(message, cid):
-    print(client.chat_messages.post(to_channel=cid, message=message))
+    print(client.chat_messages.post(to_channel=cid, message=message).content)
 
 
 def edit_message(messageId, cid, message):
-    print(client.chat_messages.update(to_channel=cid, messageId=messageId, message=message))
+    print(client.chat_messages.update(to_channel=cid, messageId=messageId, message=message).content)
 
 
 def delete_message(messageId, cid):
@@ -126,7 +126,7 @@ def delete_message(messageId, cid):
 
 
 def create_channel(name, typeOf, members):
-    print(client.chat_channels.create(name=name, type=typeOf, members=members))
+    print(client.chat_channels.create(name=name, type=typeOf, members=members).content)
 
 
 def update_channel(cid, name):
